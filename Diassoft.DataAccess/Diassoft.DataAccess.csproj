@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>3.0.0</Version>
+    <Authors>Olavo Henrique Dias</Authors>
+    <Company>Diassoft.com</Company>
+    <Description>Provides a set of classes to provide database access without using ORM. Ideal for the scenarios where you do not have a way to relate the database tables to objects.
+Accepts Dialects to parse the sql statements accordingly to the database in use. Custom Dialects can be created.</Description>
+    <Copyright>© 2019 Diassoft Corporation</Copyright>
+    <PackageProjectUrl></PackageProjectUrl>
+    <PackageIconUrl>https://github.com/diassoft/Branding/blob/master/Nuget-Package-Icon-v01.png?raw=true</PackageIconUrl>
+    <RepositoryUrl>https://github.com/diassoft/DataAccess</RepositoryUrl>
+    <RepositoryType>Public</RepositoryType>
+    <PackageTags>Diassoft Data Access DAL SQL DB2 400 AS400</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandad2.0\Diassoft.DataAccess.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Factory\" />
+    <Folder Include="Models\DTO\" />
+  </ItemGroup>
+
+</Project>
