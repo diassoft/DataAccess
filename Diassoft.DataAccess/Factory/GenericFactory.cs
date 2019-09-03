@@ -343,7 +343,7 @@ namespace Diassoft.DataAccess.Factory
                         var fieldContents = fieldInfo.Property.GetValue(model)?.ToString().PadRight(fieldInfo.Attribute.Size, ' ').Substring(0, fieldInfo.Attribute.Size).Trim();
 
                         // Apply New Contents to the Model
-                        if (fieldContents == null) fieldContents = ""; //TODO: fix framework to accept nulls
+                        //if (fieldContents == null) fieldContents = "";
 
                         fieldInfo.Property.SetValue(model, fieldContents);
 
@@ -665,7 +665,7 @@ namespace Diassoft.DataAccess.Factory
                             var fieldContents = fieldInfo.Property.GetValue(model)?.ToString().PadRight(fieldInfo.Attribute.Size, ' ').Substring(0, fieldInfo.Attribute.Size).Trim();
 
                             // Apply New Contents to the Model
-                            if (fieldContents == null) fieldContents = ""; //TODO: fix it on the framework
+                            //if (fieldContents == null) fieldContents = ""; //TODO: fix it on the framework
                             fieldInfo.Property.SetValue(model, fieldContents);
 
                             // Apply to the AssignExpression
@@ -673,9 +673,8 @@ namespace Diassoft.DataAccess.Factory
                         }
                         else
                         {
-                            //TODO: accept null. Need to fix the Diassoft DataAccess
                             // Apply New Contents to the Model
-                            fieldInfo.Property.SetValue(model, "");
+                            fieldInfo.Property.SetValue(model, null);
 
                             // Apply to the AssignExpression
                             assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), "");

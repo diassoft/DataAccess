@@ -31,8 +31,8 @@ namespace Diassoft.DataAccess.Dialects
                 { FieldOperators.GreaterThanOrEqual, ">=" },
                 { FieldOperators.LessThan, "<" },
                 { FieldOperators.LessThanOrEqual, "<=" },
-                { FieldOperators.Like, "LIKE '{value}'" },
-                { FieldOperators.NotLike, "NOT LIKE '{value}'" },
+                { FieldOperators.Like, "LIKE {value}" },
+                { FieldOperators.NotLike, "NOT LIKE {value}" },
                 { FieldOperators.In, "IN ({value})" },
                 { FieldOperators.NotIn, "NOT IN ({value})" },
                 { FieldOperators.IsNull, "IS NULL" },
@@ -235,6 +235,9 @@ namespace Diassoft.DataAccess.Dialects
         /// <returns>A <see cref="string"/> containing the formatted results</returns>
         protected virtual string FormatString(string value)
         {
+            // Escape characters
+            value = value.Replace(FieldValueChar, FieldValueChar + FieldValueChar);
+
             return $"{FieldValueChar}{value}{FieldValueChar}";
         }
         
@@ -498,7 +501,7 @@ namespace Diassoft.DataAccess.Dialects
         /// <returns>A <see cref="string"/> containingt he formatted object</returns>
         protected string FormatExpressionField(object field)
         {
-            if (field == null) return "";
+            if (field == null) return "NULL";
 
             if (field.GetType() == typeof(AggregateField)) return FormatField((AggregateField)field);
             else if (field.GetType() == typeof(DisplayField)) return FormatField((DisplayField)field);

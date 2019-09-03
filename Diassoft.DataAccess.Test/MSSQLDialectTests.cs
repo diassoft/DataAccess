@@ -339,6 +339,59 @@ namespace Diassoft.DataAccess.Test
             Assert.AreEqual<string>(expectedStatement, statement);
         }
 
+        [TestMethod]
+        public void TestSelectDbOperation_012_SelectWithLike()
+        {
+            // Initializes the Select Statement
+            SelectDbOperation select = new SelectDbOperation(new Table("testtable", "dbo", "0"))
+            {
+                Where = new WhereCollection()
+                {
+                    new FilterExpression(new Field("field1"), FieldOperators.Like, "AB", FieldAndOr.And),
+                    new FilterExpression(new Field("field2"), FieldOperators.GreaterThan, 15, FieldAndOr.And),
+                    new FilterExpression(new Field("field3"), FieldOperators.LessThan, 15, FieldAndOr.None),
+                }
+            };
+
+            string statement = myDialect.Select(select);
+            string expectedStatement = "SELECT *\r\n" +
+                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       " WHERE\r\n" +
+                                       "       [field1] LIKE 'AB' AND\r\n" +
+                                       "       [field2]>15 AND\r\n" +
+                                       "       [field3]<15\r\n";
+
+            // Assertion
+            Assert.AreEqual<string>(expectedStatement, statement);
+
+        }
+
+        [TestMethod]
+        public void TestSelectDbOperation_013_SelectWithNull()
+        {
+            // Initializes the Select Statement
+            SelectDbOperation select = new SelectDbOperation(new Table("testtable", "dbo", "0"))
+            {
+                Where = new WhereCollection()
+                {
+                    new FilterExpression(new Field("field1"), FieldOperators.Equal, null, FieldAndOr.And),
+                    new FilterExpression(new Field("field2"), FieldOperators.GreaterThan, 15, FieldAndOr.And),
+                    new FilterExpression(new Field("field3"), FieldOperators.LessThan, 15, FieldAndOr.None),
+                }
+            };
+
+            string statement = myDialect.Select(select);
+            string expectedStatement = "SELECT *\r\n" +
+                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       " WHERE\r\n" +
+                                       "       [field1]=NULL AND\r\n" +
+                                       "       [field2]>15 AND\r\n" +
+                                       "       [field3]<15\r\n";
+
+            // Assertion
+            Assert.AreEqual<string>(expectedStatement, statement);
+
+        }
 
         #endregion SelectDbOperation
 
@@ -372,6 +425,65 @@ namespace Diassoft.DataAccess.Test
                                        "                    'value2',\r\n" +
                                        "                    200,\r\n" +
                                        "                    '2020-01-01 00:00:00'\r\n" +
+                                       "            )\r\n";
+
+            // Assertion
+            Assert.AreEqual<string>(expectedStatement, statement);
+        }
+
+        [TestMethod]
+        public void TestInsertDbOperation_002_InsertWithNulls()
+        {
+            // Initializes the Insert Statement
+            InsertDbOperation insert = new InsertDbOperation(new Table("testtable", "dbo", "0"))
+            {
+                Assignments = new AssignExpression[]
+                {
+                    new AssignExpression(new Field("field1"),"value1"),
+                    new AssignExpression(new Field("field2"),null),
+                    new AssignExpression(new Field("field3"),200),
+                    new AssignExpression(new Field("field4"),new DateTime(2020, 1, 1)),
+                }
+            };
+
+            string statement = myDialect.Insert(insert);
+            string expectedStatement = "INSERT INTO [dbo].[testtable]\r\n" +
+                                       "            (\r\n" +
+                                       "                    [field1],\r\n" +
+                                       "                    [field2],\r\n" +
+                                       "                    [field3],\r\n" +
+                                       "                    [field4]\r\n" +
+                                       "            )\r\n" +
+                                       "     VALUES (\r\n" +
+                                       "                    'value1',\r\n" +
+                                       "                    NULL,\r\n" +
+                                       "                    200,\r\n" +
+                                       "                    '2020-01-01 00:00:00'\r\n" +
+                                       "            )\r\n";
+
+            // Assertion
+            Assert.AreEqual<string>(expectedStatement, statement);
+        }
+
+        [TestMethod]
+        public void TestInsertDbOperation_003_EscapedString()
+        {
+            // Initializes the Insert Statement
+            InsertDbOperation insert = new InsertDbOperation(new Table("testtable", "dbo", "0"))
+            {
+                Assignments = new AssignExpression[]
+                {
+                    new AssignExpression(new Field("field1"),"val'ue1"),
+                }
+            };
+
+            string statement = myDialect.Insert(insert);
+            string expectedStatement = "INSERT INTO [dbo].[testtable]\r\n" +
+                                       "            (\r\n" +
+                                       "                    [field1]\r\n" +
+                                       "            )\r\n" +
+                                       "     VALUES (\r\n" +
+                                       "                    'val''ue1'\r\n" +
                                        "            )\r\n";
 
             // Assertion
