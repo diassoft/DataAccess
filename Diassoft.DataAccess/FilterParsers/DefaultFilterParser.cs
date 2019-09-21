@@ -120,11 +120,11 @@ namespace Diassoft.DataAccess.FilterParsers
                         var fieldValuesList = new List<object>();
                         foreach (var fd in fieldDataArray)
                         {
-                            var (type, value) = InferDataType(fd);
+                            var inferredDataType = InferDataType(fd);
                             if (filterField.Type == null)
-                                filterField.Type = type;
+                                filterField.Type = inferredDataType.Type;
 
-                            fieldValuesList.Add(value);
+                            fieldValuesList.Add(inferredDataType.Value);
                         }
 
                         filterField.OriginalValue = fieldValue;
@@ -133,11 +133,11 @@ namespace Diassoft.DataAccess.FilterParsers
                     else
                     {
                         // Operator has a single value
-                        var (type, value) = InferDataType(fieldValue);
+                        var inferredDataType = InferDataType(fieldValue);
 
                         filterField.OriginalValue = fieldValue;
-                        filterField.Value = value;
-                        filterField.Type = type;
+                        filterField.Value = inferredDataType.Value;
+                        filterField.Type = inferredDataType.Type;
                     }
 
                     // Add to the Results
@@ -153,12 +153,12 @@ namespace Diassoft.DataAccess.FilterParsers
         /// </summary>
         /// <param name="input">The input string</param>
         /// <returns>A tuple containing the type and the value</returns>
-        private (Type type, object value) InferDataType(string input)
+        private InferredDataType InferDataType(string input)
         {
             // Check for Numeric Value
             if (Double.TryParse(input, defaultNumberStyle, defaultCulture, out Double doubleValue))
             {
-                return (typeof(double), doubleValue);
+                return new InferredDataType(typeof(double), doubleValue);
             }
 
             // Check for DateTime Value
@@ -166,13 +166,39 @@ namespace Diassoft.DataAccess.FilterParsers
 
             if (DateTime.TryParseExact(input, dateFormats, defaultCulture, DateTimeStyles.None, out DateTime dateTimeValue))
             {
-                return (typeof(System.DateTime), dateTimeValue);
+                return new InferredDataType(typeof(System.DateTime), dateTimeValue);
             }
 
             // Assume it is a string
-            return (typeof(System.String), input);
+            return new InferredDataType(typeof(System.String), input);
         }
 
+    }
+    
+    /// <summary>
+    /// Represents an internal class to be used for the <see cref="DefaultFilterParser.InferDataType(string)"/> method
+    /// </summary>
+    internal class InferredDataType
+    {
+        /// <summary>
+        /// The type inferred
+        /// </summary>
+        public Type Type { get; }
+        /// <summary>
+        /// The value inferred
+        /// </summary>
+        public object Value { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InferredDataType"/>
+        /// </summary>
+        /// <param name="type">The type inferred</param>
+        /// <param name="value">The value inferred</param>
+        public InferredDataType(Type type, object value)
+        {
+            this.Type = type;
+            this.Value = value;
+        }
     }
 
 }

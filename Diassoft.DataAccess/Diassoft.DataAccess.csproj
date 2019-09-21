@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45;net451;net452;net46;net461;netcoreapp2.0;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
     <Authors>Olavo Henrique Dias</Authors>
     <Company>Diassoft.com</Company>
     <Description>Provides a set of classes to provide database access without using ORM. Ideal for the scenarios where you do not have a way to relate the database tables to objects.
@@ -20,7 +20,11 @@ Accepts Dialects to parse the sql statements accordingly to the database in use.
     <DocumentationFile>bin\Debug\netstandad2.0\Diassoft.DataAccess.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.0'">
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
   </ItemGroup>
 
