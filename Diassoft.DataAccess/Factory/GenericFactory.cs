@@ -333,47 +333,51 @@ namespace Diassoft.DataAccess.Factory
                 var assignExpressions = new List<AssignExpression>();
                 foreach (var fieldInfo in Fields)
                 {
-                    // Define the Assign Expression Object
-                    AssignExpression assignExpression;
-
-                    // For String type, shrink character count (when size is specified)
-                    if ((fieldInfo.Attribute.Type == typeof(string)) && (fieldInfo.Attribute.Size > 0))
+                    // Make sure field is not to be ignored
+                    if (!fieldInfo.Attribute.IgnoreOnInsert)
                     {
-                        // Shrink Field Contents, if applicable
-                        var fieldContents = fieldInfo.Property.GetValue(model)?.ToString().PadRight(fieldInfo.Attribute.Size, ' ').Substring(0, fieldInfo.Attribute.Size).Trim();
+                        // Define the Assign Expression Object
+                        AssignExpression assignExpression;
 
-                        // Apply New Contents to the Model
-                        //if (fieldContents == null) fieldContents = "";
-
-                        fieldInfo.Property.SetValue(model, fieldContents);
-
-                        // Apply to the AssignExpression
-                        assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldContents);
-                    }
-                    else
-                    {
-                        // Check for Enum types
-                        if (fieldInfo.Property.PropertyType.IsEnum)
+                        // For String type, shrink character count (when size is specified)
+                        if ((fieldInfo.Attribute.Type == typeof(string)) && (fieldInfo.Attribute.Size > 0))
                         {
-                            // Enumerations have a special treatment as its value need to be parsed from the string that represents it
-                            var enumValue = fieldInfo.Property.GetValue(model);
-                            object finalValue = null;
+                            // Shrink Field Contents, if applicable
+                            var fieldContents = fieldInfo.Property.GetValue(model)?.ToString().PadRight(fieldInfo.Attribute.Size, ' ').Substring(0, fieldInfo.Attribute.Size).Trim();
 
-                            // If value is null, force it to zero
-                            if (enumValue == null)
-                                finalValue = 0;
-                            else
-                                finalValue = Convert.ChangeType(enumValue, fieldInfo.Property.PropertyType.GetEnumUnderlyingType());
+                            // Apply New Contents to the Model
+                            //if (fieldContents == null) fieldContents = "";
 
-                            assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), finalValue);
+                            fieldInfo.Property.SetValue(model, fieldContents);
+
+                            // Apply to the AssignExpression
+                            assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldContents);
                         }
                         else
                         {
-                            assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldInfo.Property.GetValue(model));
-                        }
-                    }
+                            // Check for Enum types
+                            if (fieldInfo.Property.PropertyType.IsEnum)
+                            {
+                                // Enumerations have a special treatment as its value need to be parsed from the string that represents it
+                                var enumValue = fieldInfo.Property.GetValue(model);
+                                object finalValue = null;
 
-                    assignExpressions.Add(assignExpression);
+                                // If value is null, force it to zero
+                                if (enumValue == null)
+                                    finalValue = 0;
+                                else
+                                    finalValue = Convert.ChangeType(enumValue, fieldInfo.Property.PropertyType.GetEnumUnderlyingType());
+
+                                assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), finalValue);
+                            }
+                            else
+                            {
+                                assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldInfo.Property.GetValue(model));
+                            }
+                        }
+
+                        assignExpressions.Add(assignExpression);
+                    }
                 }
 
                 // Create the Insert Operation with the previously setup Assign Expressions
@@ -653,57 +657,61 @@ namespace Diassoft.DataAccess.Factory
                 var assignExpressions = new List<AssignExpression>();
                 foreach (var fieldInfo in Fields)
                 {
-                    // Define the Assign Expression Object
-                    AssignExpression assignExpression;
-
-                    // For String type, shrink character count (when size is specified)
-                    if ((fieldInfo.Attribute.Type == typeof(string)) && (fieldInfo.Attribute.Size > 0))
+                    // Make sure field is not to be ignored
+                    if (!fieldInfo.Attribute.IgnoreOnInsert)
                     {
-                        if (fieldInfo.Property.GetValue(model) != null)
+                        // Define the Assign Expression Object
+                        AssignExpression assignExpression;
+
+                        // For String type, shrink character count (when size is specified)
+                        if ((fieldInfo.Attribute.Type == typeof(string)) && (fieldInfo.Attribute.Size > 0))
                         {
-                            // Shrink Field Contents, if applicable
-                            var fieldContents = fieldInfo.Property.GetValue(model)?.ToString().PadRight(fieldInfo.Attribute.Size, ' ').Substring(0, fieldInfo.Attribute.Size).Trim();
+                            if (fieldInfo.Property.GetValue(model) != null)
+                            {
+                                // Shrink Field Contents, if applicable
+                                var fieldContents = fieldInfo.Property.GetValue(model)?.ToString().PadRight(fieldInfo.Attribute.Size, ' ').Substring(0, fieldInfo.Attribute.Size).Trim();
 
-                            // Apply New Contents to the Model
-                            //if (fieldContents == null) fieldContents = ""; //TODO: fix it on the framework
-                            fieldInfo.Property.SetValue(model, fieldContents);
+                                // Apply New Contents to the Model
+                                //if (fieldContents == null) fieldContents = ""; //TODO: fix it on the framework
+                                fieldInfo.Property.SetValue(model, fieldContents);
 
-                            // Apply to the AssignExpression
-                            assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldContents);
-                        }
-                        else
-                        {
-                            // Apply New Contents to the Model
-                            fieldInfo.Property.SetValue(model, null);
-
-                            // Apply to the AssignExpression
-                            assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), "");
-                        }
-                    }
-                    else
-                    {
-                        // Check for Enum types
-                        if (fieldInfo.Property.PropertyType.IsEnum)
-                        {
-                            // Enumerations have a special treatment as its value need to be parsed from the string that represents it
-                            var enumValue = fieldInfo.Property.GetValue(model);
-                            object finalValue = null;
-
-                            // If value is null, force it to zero
-                            if (enumValue == null)
-                                finalValue = 0;
+                                // Apply to the AssignExpression
+                                assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldContents);
+                            }
                             else
-                                finalValue = Convert.ChangeType(enumValue, fieldInfo.Property.PropertyType.GetEnumUnderlyingType());
+                            {
+                                // Apply New Contents to the Model
+                                fieldInfo.Property.SetValue(model, null);
 
-                            assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), finalValue);
+                                // Apply to the AssignExpression
+                                assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), "");
+                            }
                         }
                         else
                         {
-                            assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldInfo.Property.GetValue(model));
-                        }
-                    }
+                            // Check for Enum types
+                            if (fieldInfo.Property.PropertyType.IsEnum)
+                            {
+                                // Enumerations have a special treatment as its value need to be parsed from the string that represents it
+                                var enumValue = fieldInfo.Property.GetValue(model);
+                                object finalValue = null;
 
-                    assignExpressions.Add(assignExpression);
+                                // If value is null, force it to zero
+                                if (enumValue == null)
+                                    finalValue = 0;
+                                else
+                                    finalValue = Convert.ChangeType(enumValue, fieldInfo.Property.PropertyType.GetEnumUnderlyingType());
+
+                                assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), finalValue);
+                            }
+                            else
+                            {
+                                assignExpression = new AssignExpression(new Field(fieldInfo.Attribute.Name), fieldInfo.Property.GetValue(model));
+                            }
+                        }
+
+                        assignExpressions.Add(assignExpression);
+                    }
                 }
 
                 var update = new UpdateDbOperation(DatabaseTableAttribute.Name)

@@ -31,7 +31,12 @@ namespace Diassoft.DataAccess.Attributes
         /// Defines whether the field is part of the Primary Key.
         /// </summary>
         /// <remarks>Primary Key fields are used to define the Database Operations of Update and Delete. They are also used on the Creation of a Record to validate if it doesn't exists already.</remarks>
-        public bool IsPrimaryKey { get; set; }
+        public bool IsPrimaryKey { get; set; } = false;
+        /// <summary>
+        /// Defines whether the field should be ignored on the insert
+        /// </summary>
+        /// <remarks>Use this parameter for Identity Columns, to prevent the system to attempt to add it to Inserts and Updates</remarks>
+        public bool IgnoreOnInsert { get; set; } = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseFieldAttribute"/>
@@ -87,7 +92,6 @@ namespace Diassoft.DataAccess.Attributes
             this.Size = size;
             this.Decimals = decimals;
         }
-
 
     }
 }
