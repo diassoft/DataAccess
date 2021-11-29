@@ -126,6 +126,16 @@ namespace Diassoft.DataAccess.Dialects
         /// </summary>
         public Dictionary<Aggregates, string> AggregateFunctions { get; protected set; }
 
+        /// <summary>
+        /// A string to be added before the table name on all SQL statements
+        /// </summary>
+        public string TableNamePrefix { get; set; } = "";
+
+        /// <summary>
+        /// A string to be added after the table name on all SQL statements
+        /// </summary>
+        public string TableNameSuffix { get; set; } = "";
+
         #endregion Properties
 
         #region Quick Initialization Methods
@@ -614,8 +624,8 @@ namespace Diassoft.DataAccess.Dialects
                 FormattedTableName += $"{CharacterBegin}{table.Owner}{CharacterEnd}.";
             }
 
-            // Add the table name
-            FormattedTableName += $"{CharacterBegin}{table.Name}{CharacterEnd}";
+            // Add the table name with Prefix and Suffix
+            FormattedTableName += $"{CharacterBegin}{TableNamePrefix}{table.Name}{TableNameSuffix}{CharacterEnd}";
 
             // Verify Alias
             if (table?.Alias?.ToString() != "")

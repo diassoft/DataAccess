@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45;net451;net452;net46;net461;netcoreapp2.0;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.3</Version>
+    <Version>3.0.4</Version>
     <Authors>Olavo Henrique Dias</Authors>
     <Company>Diassoft.com</Company>
     <Description>Provides a set of classes to provide database access without using ORM. Ideal for the scenarios where you do not have a way to relate the database tables to objects.

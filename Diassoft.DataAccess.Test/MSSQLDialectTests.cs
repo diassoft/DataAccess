@@ -12,8 +12,13 @@ namespace Diassoft.DataAccess.Test
     [TestClass]
     public class MSSQLDialectTests
     {
-        // Dialect to be used among all testing
-        MSSQLDialect myDialect = new MSSQLDialect();
+        // Default MSSQL Dialect
+        readonly MSSQLDialect myDialect = new MSSQLDialect();
+        readonly MSSQLDialect myDialectWithTablePrefixAndSuffix = new MSSQLDialect()
+        {
+            TableNamePrefix = "Prefix_",
+            TableNameSuffix = "_Suffix"
+        };
 
         #region SelectDbOperation
 
@@ -392,6 +397,21 @@ namespace Diassoft.DataAccess.Test
             Assert.AreEqual<string>(expectedStatement, statement);
 
         }
+
+        [TestMethod]
+        public void TestSelectDbOperation_014_SimpleSelectWithTablePrefixAndSuffix()
+        {
+            // Initializes the Select Statement
+            SelectDbOperation select = new SelectDbOperation(new Table("testtable", "dbo", "0"));
+
+            string statement = myDialectWithTablePrefixAndSuffix.Select(select);
+            string expectedStatement = "SELECT *\r\n" +
+                                       "  FROM [dbo].[Prefix_testtable_Suffix] T_0\r\n";
+
+            // Assertion
+            Assert.AreEqual<string>(expectedStatement, statement);
+        }
+
 
         #endregion SelectDbOperation
 
