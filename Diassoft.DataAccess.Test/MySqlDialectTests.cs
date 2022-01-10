@@ -10,11 +10,11 @@ using Diassoft.DataAccess.DatabaseObjects.Expressions;
 namespace Diassoft.DataAccess.Test
 {
     [TestClass]
-    public class MSSQLDialectTests
+    public class MySqlDialectTests
     {
         // Default MSSQL Dialect
-        readonly MSSQLDialect myDialect = new MSSQLDialect();
-        readonly MSSQLDialect myDialectWithTablePrefixAndSuffix = new MSSQLDialect()
+        readonly MySqlDialect myDialect = new MySqlDialect();
+        readonly MySqlDialect myDialectWithTablePrefixAndSuffix = new MySqlDialect()
         {
             TableNamePrefix = "Prefix_",
             TableNameSuffix = "_Suffix"
@@ -30,7 +30,7 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n";
+                                       "  FROM `dbo`.`testtable` T_0\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -52,9 +52,9 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT \r\n" +
-                                       "       T_0.[field1] field1_alternate,\r\n" +
-                                       "       T_0.[field2] field2_alternate\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n";
+                                       "       T_0.`field1` field1_alternate,\r\n" +
+                                       "       T_0.`field2` field2_alternate\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -75,7 +75,7 @@ namespace Diassoft.DataAccess.Test
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT \r\n" +
                                        "       COUNT(0)\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n";
+                                       "  FROM `dbo`.`testtable` T_0\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -96,7 +96,7 @@ namespace Diassoft.DataAccess.Test
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT \r\n" +
                                        "       COUNT(*)\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n";
+                                       "  FROM `dbo`.`testtable` T_0\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -118,8 +118,8 @@ namespace Diassoft.DataAccess.Test
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
                                        "  FROM \r\n" +
-                                       "       [dbo].[testtable] T_0,\r\n" +
-                                       "       [dbo].[testtable2] T_1\r\n";
+                                       "       `dbo`.`testtable` T_0,\r\n" +
+                                       "       `dbo`.`testtable2` T_1\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -146,17 +146,17 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT \r\n" +
-                                       "       T_0.[field1] field1_alternate,\r\n" +
-                                       "       T_0.[field2],\r\n" +
-                                       "       MAX(T_0.[field3]),\r\n" +
-                                       "       MIN([field4]),\r\n" +
-                                       "       COUNT(DISTINCT T_0.[field5]),\r\n" +
-                                       "       AVG(T_0.[field6]),\r\n" +
-                                       "       SUM([field7])\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "       T_0.`field1` field1_alternate,\r\n" +
+                                       "       T_0.`field2`,\r\n" +
+                                       "       MAX(T_0.`field3`),\r\n" +
+                                       "       MIN(`field4`),\r\n" +
+                                       "       COUNT(DISTINCT T_0.`field5`),\r\n" +
+                                       "       AVG(T_0.`field6`),\r\n" +
+                                       "       SUM(`field7`)\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        "GROUP BY\r\n" +
-                                       "         T_0.[field1],\r\n" +
-                                       "         T_0.[field2]\r\n";
+                                       "         T_0.`field1`,\r\n" +
+                                       "         T_0.`field2`\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -178,11 +178,11 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]='Test' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15\r\n";
+                                       "       `field1`='Test' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -211,17 +211,17 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]='Test' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15 AND\r\n" +
-                                       "       [field4]='2020-01-01 00:00:00' AND\r\n" +
+                                       "       `field1`='Test' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15 AND\r\n" +
+                                       "       `field4`='2020-01-01 00:00:00' AND\r\n" +
                                        "       (\r\n" +
-                                       "              [field5]='Test' OR\r\n" +
-                                       "              [field5]='Test2'\r\n" +
+                                       "              `field5`='Test' OR\r\n" +
+                                       "              `field5`='Test2'\r\n" +
                                        "       ) AND\r\n" +
-                                       "       [field6]='2020-01-01 00:00:00'\r\n";
+                                       "       `field6`='2020-01-01 00:00:00'\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -244,12 +244,12 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]='Test' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15 AND\r\n" +
-                                       "       [field4] BETWEEN 'A01' AND 'A02'\r\n";
+                                       "       `field1`='Test' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15 AND\r\n" +
+                                       "       `field4` BETWEEN 'A01' AND 'A02'\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -272,12 +272,12 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]='Test' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15 AND\r\n" +
-                                       "       [field4] IS NULL\r\n";
+                                       "       `field1`='Test' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15 AND\r\n" +
+                                       "       `field4` IS NULL\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -318,27 +318,27 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT \r\n" +
-                                       "       T_0.[field1] field1_alternate,\r\n" +
-                                       "       T_0.[field2],\r\n" +
-                                       "       MAX(T_0.[field3]),\r\n" +
-                                       "       MIN([field4]),\r\n" +
-                                       "       COUNT(DISTINCT T_0.[field5]),\r\n" +
-                                       "       AVG(T_0.[field6]),\r\n" +
-                                       "       SUM([field7])\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "       T_0.`field1` field1_alternate,\r\n" +
+                                       "       T_0.`field2`,\r\n" +
+                                       "       MAX(T_0.`field3`),\r\n" +
+                                       "       MIN(`field4`),\r\n" +
+                                       "       COUNT(DISTINCT T_0.`field5`),\r\n" +
+                                       "       AVG(T_0.`field6`),\r\n" +
+                                       "       SUM(`field7`)\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]='Test' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15 AND\r\n" +
-                                       "       [field4] BETWEEN 'A01' AND 'A02' AND\r\n" +
-                                       "       [field5] IS NULL AND\r\n" +
-                                       "       [field6] IS NOT NULL\r\n" +
+                                       "       `field1`='Test' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15 AND\r\n" +
+                                       "       `field4` BETWEEN 'A01' AND 'A02' AND\r\n" +
+                                       "       `field5` IS NULL AND\r\n" +
+                                       "       `field6` IS NOT NULL\r\n" +
                                        "GROUP BY\r\n" +
-                                       "         T_0.[field1],\r\n" +
-                                       "         T_0.[field2]\r\n" +
+                                       "         T_0.`field1`,\r\n" +
+                                       "         T_0.`field2`\r\n" +
                                        "ORDER BY\r\n" +
-                                       "         T_0.[field1],\r\n" +
-                                       "         [field2] DESC\r\n";
+                                       "         T_0.`field1`,\r\n" +
+                                       "         `field2` DESC\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -360,11 +360,11 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1] LIKE 'AB' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15\r\n";
+                                       "       `field1` LIKE 'AB' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -387,11 +387,11 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialect.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]=NULL AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15\r\n";
+                                       "       `field1`=NULL AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -406,7 +406,7 @@ namespace Diassoft.DataAccess.Test
 
             string statement = myDialectWithTablePrefixAndSuffix.Select(select);
             string expectedStatement = "SELECT *\r\n" +
-                                       "  FROM [dbo].[Prefix_testtable_Suffix] T_0\r\n";
+                                       "  FROM `dbo`.`Prefix_testtable_Suffix` T_0\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -419,14 +419,13 @@ namespace Diassoft.DataAccess.Test
             SelectDbOperation select = new SelectDbOperation(new Table("testtable", "dbo", "0"));
 
             string statement = myDialect.SelectInto(select, new Table("testinserttable", "dbo", "0"));
-            string expectedStatement = "SELECT *\r\n" +
-                                       "  INTO [dbo].[testinserttable]\r\n" +
-                                       "  FROM [dbo].[testtable] T_0\r\n";
+            string expectedStatement = "CREATE TABLE `dbo`.`testinserttable` AS\r\n" +
+                                       "SELECT *\r\n" +
+                                       "  FROM `dbo`.`testtable` T_0\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
         }
-
 
         #endregion SelectDbOperation
 
@@ -448,12 +447,12 @@ namespace Diassoft.DataAccess.Test
             };
 
             string statement = myDialect.Insert(insert);
-            string expectedStatement = "INSERT INTO [dbo].[testtable]\r\n" +
+            string expectedStatement = "INSERT INTO `dbo`.`testtable`\r\n" +
                                        "            (\r\n" +
-                                       "                    [field1],\r\n" +
-                                       "                    [field2],\r\n" +
-                                       "                    [field3],\r\n" +
-                                       "                    [field4]\r\n" +
+                                       "                    `field1`,\r\n" +
+                                       "                    `field2`,\r\n" +
+                                       "                    `field3`,\r\n" +
+                                       "                    `field4`\r\n" +
                                        "            )\r\n" +
                                        "     VALUES (\r\n" +
                                        "                    'value1',\r\n" +
@@ -482,12 +481,12 @@ namespace Diassoft.DataAccess.Test
             };
 
             string statement = myDialect.Insert(insert);
-            string expectedStatement = "INSERT INTO [dbo].[testtable]\r\n" +
+            string expectedStatement = "INSERT INTO `dbo`.`testtable`\r\n" +
                                        "            (\r\n" +
-                                       "                    [field1],\r\n" +
-                                       "                    [field2],\r\n" +
-                                       "                    [field3],\r\n" +
-                                       "                    [field4]\r\n" +
+                                       "                    `field1`,\r\n" +
+                                       "                    `field2`,\r\n" +
+                                       "                    `field3`,\r\n" +
+                                       "                    `field4`\r\n" +
                                        "            )\r\n" +
                                        "     VALUES (\r\n" +
                                        "                    'value1',\r\n" +
@@ -513,9 +512,9 @@ namespace Diassoft.DataAccess.Test
             };
 
             string statement = myDialect.Insert(insert);
-            string expectedStatement = "INSERT INTO [dbo].[testtable]\r\n" +
+            string expectedStatement = "INSERT INTO `dbo`.`testtable`\r\n" +
                                        "            (\r\n" +
-                                       "                    [field1]\r\n" +
+                                       "                    `field1`\r\n" +
                                        "            )\r\n" +
                                        "     VALUES (\r\n" +
                                        "                    'val''ue1'\r\n" +
@@ -553,19 +552,19 @@ namespace Diassoft.DataAccess.Test
             };
 
             string statement = myDialect.InsertFromSelect(insert, select);
-            string expectedStatement = "INSERT INTO [dbo].[testtable]\r\n" +
+            string expectedStatement = "INSERT INTO `dbo`.`testtable`\r\n" +
                                        "            (\r\n" +
-                                       "                    [field1],\r\n" +
-                                       "                    [field2],\r\n" +
-                                       "                    [field3],\r\n" +
-                                       "                    [field4]\r\n" +
+                                       "                    `field1`,\r\n" +
+                                       "                    `field2`,\r\n" +
+                                       "                    `field3`,\r\n" +
+                                       "                    `field4`\r\n" +
                                        "            )\r\n" +
                                        "SELECT \r\n" +
-                                       "       T_0.[field1],\r\n" +
-                                       "       T_0.[field2],\r\n" +
-                                       "       T_0.[field3],\r\n" +
-                                       "       T_0.[field4]\r\n" +
-                                       "  FROM [dbo].[testselecttable] T_0\r\n\r\n";
+                                       "       T_0.`field1`,\r\n" +
+                                       "       T_0.`field2`,\r\n" +
+                                       "       T_0.`field3`,\r\n" +
+                                       "       T_0.`field4`\r\n" +
+                                       "  FROM `dbo`.`testselecttable` T_0\r\n\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -597,16 +596,16 @@ namespace Diassoft.DataAccess.Test
             };
 
             string statement = myDialect.Update(update);
-            string expectedStatement = "UPDATE [dbo].[testtable]\r\n" +
+            string expectedStatement = "UPDATE `dbo`.`testtable`\r\n" +
                                        "   SET\r\n" +
-                                       "       [field1]='value1',\r\n" +
-                                       "       [field2]='value2',\r\n" +
-                                       "       [field3]=200,\r\n" +
-                                       "       [field4]='2020-01-01 00:00:00'\r\n" +
+                                       "       `field1`='value1',\r\n" +
+                                       "       `field2`='value2',\r\n" +
+                                       "       `field3`=200,\r\n" +
+                                       "       `field4`='2020-01-01 00:00:00'\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]='Test' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15\r\n";
+                                       "       `field1`='Test' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
@@ -631,11 +630,11 @@ namespace Diassoft.DataAccess.Test
             };
 
             string statement = myDialect.Delete(delete);
-            string expectedStatement = "DELETE FROM [dbo].[testtable]\r\n" +
+            string expectedStatement = "DELETE FROM `dbo`.`testtable`\r\n" +
                                        " WHERE\r\n" +
-                                       "       [field1]='Test' AND\r\n" +
-                                       "       [field2]>15 AND\r\n" +
-                                       "       [field3]<15\r\n";
+                                       "       `field1`='Test' AND\r\n" +
+                                       "       `field2`>15 AND\r\n" +
+                                       "       `field3`<15\r\n";
 
             // Assertion
             Assert.AreEqual<string>(expectedStatement, statement);
