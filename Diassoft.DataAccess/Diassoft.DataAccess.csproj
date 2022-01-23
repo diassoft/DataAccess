@@ -3,17 +3,19 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45;net451;net452;net46;net461;netcoreapp2.0;</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.5</Version>
+    <Version>3.0.7</Version>
     <Authors>Olavo Henrique Dias</Authors>
     <Company>Diassoft.com</Company>
     <Description>Provides a set of classes to provide database access without using ORM. Ideal for the scenarios where you do not have a way to relate the database tables to objects.
 Accepts Dialects to parse the sql statements accordingly to the database in use. Custom Dialects can be created.</Description>
     <Copyright>© 2022 Diassoft Corporation</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
+    <PackageIcon>Nuget\Nuget-Package-Icon-v01-250x250.png</PackageIcon>
     <PackageIconUrl>https://github.com/diassoft/Branding/blob/master/Nuget-Package-Icon-v01.png?raw=true</PackageIconUrl>
+    <iconUrl>https://github.com/diassoft/Branding/blob/master/Nuget-Package-Icon-v01.png?raw=true</iconUrl>
     <RepositoryUrl>https://github.com/diassoft/DataAccess</RepositoryUrl>
     <RepositoryType>Public</RepositoryType>
-    <PackageTags>Diassoft Data Access DAL SQL DB2 400 AS400</PackageTags>
+    <PackageTags>Diassoft Data Access DAL SQL DB2 400 AS400 MySQL</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -22,10 +24,10 @@ Accepts Dialects to parse the sql statements accordingly to the database in use.
 
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <PackageIconUrl />
+    <PackageIconUrl>https://github.com/diassoft/Branding/blob/master/Nuget-Package-Icon-v01.png?raw=true</PackageIconUrl>
     <ApplicationIcon />
-    <AssemblyVersion>3.0.5.0</AssemblyVersion>
-    <FileVersion>3.0.5.0</FileVersion>
+    <AssemblyVersion>3.0.7.0</AssemblyVersion>
+    <FileVersion>3.0.7.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.0'">
@@ -33,12 +35,8 @@ Accepts Dialects to parse the sql statements accordingly to the database in use.
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Nuget\Nuget-Package-Icon-v01-250x250.png" />
+    <None Include="Nuget\Nuget-Package-Icon-v01-250x250.png" Pack="true" Visiable="false" PackagePath="Nuget\Nuget-Package-Icon-v01-250x250.png" />
     <None Remove="Nuget\nuget_package_icon_v01_250x250_qtd_icon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Nuget\Nuget-Package-Icon-v01-250x250.png" />
   </ItemGroup>
 
   <ItemGroup>
